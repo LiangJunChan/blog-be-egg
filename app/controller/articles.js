@@ -11,16 +11,14 @@ class ArticlesController extends Controller {
   async list() {
     const data = await readFile(`${rootPath}/view/articles/authbuild.md`);
     const htmlStr = marked(data.toString());
-    // fs.readFile(`${rootPath}/view/articles/authbuild.md`, 'utf8', (err, markContent) => {
-    //   if (err) {
-    //     throw err;
-    //   } else {
-    //     const htmlStr = marked(markContent.toString());
-    //     content = htmlStr;
-    //   }
-    // });
     const ctx = this.ctx;
-    await ctx.render('articles/template.tpl', { content: htmlStr });
+    await ctx.render('template/template.tpl', { content: htmlStr });
+  }
+  async detail() {
+    const { ctx } = this;
+    const { name } = ctx.params;
+    const htmlStr = await ctx.service.articles.detail(name);
+    await ctx.render('template/template.tpl', { content: htmlStr });
   }
 }
 
